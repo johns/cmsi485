@@ -52,26 +52,46 @@ class MazeProblem:
         self.initial = None
         self.goals = []
 
-        # TODO: Populate initial and goals attributes
+        x = 0
+        y = 0
+
+        for row in self.maze:
+            for point in row:
+                if point is "*":
+                    self.initial = (x, y)
+                if point is "G":
+                    self.goals.append((x, y))
+                x += 1
+            y += 1
+
+        # DONE: Populate initial and goals attributes
 
     # goalTest is parameterized by a state, and
     # returns True if the given state is a goal, False otherwise
     def goalTest(self, state):
-        # TODO: Implement as intended
-        return False
+        return state in self.goals
 
     # transitions returns a list of tuples in the format:
     # [(action1, result(action1, s), ...]
     # corresponding to allowable actions of the given state, as well
     # as the next state the action leads to
     def transitions(self, state):
-        # TODO: Implement as intended
-        return []
+        # DONE: Implement as intended
+        transition_list = []
+        if self.maze[state[1]][state[0] % 5 - 1] is not "X":
+            transition_list.append(("L", (state[0]-1, state[1])))
+        if self.maze[state[1] - 1][state[0] % 5] is not "X":
+            transition_list.append(("U", (state[0], state[1]-1)))
+        if self.maze[state[1]][state[0] % 5+1] is not "X":
+            transition_list.append(("R", (state[0]+1, state[1])))
+        if self.maze[state[1] + 1][state[0] % 5] is not "X":
+            transition_list.append(("D", (state[0], state[1]+1)))
+        return transition_list
 
     # solnTest will return a tuple of the format (cost, isSoln) where:
     # cost = the total cost of the solution,
     # isSoln = true if the given sequence of actions of the format:
-    # [a1, a2, ...] successfully navigates to a goal state from the initial state
+    # [a1, a2, ...] successfully navigates to goal state from the initial state
     # If NOT a solution, return a cost of -1
     def solnTest(self, soln):
         trans = {"U": (0, -1), "D": (0, 1), "L": (-1, 0), "R": (1, 0)}
