@@ -43,6 +43,8 @@ For example, if an agent is at state (1, 1), and can only move right and down,
 then the transitions for that s = (1, 1) would be:
 [("R", (2, 1)), ("D", (1, 2))]
 '''
+
+
 class MazeProblem:
 
     # MazeProblem Constructor:
@@ -56,6 +58,7 @@ class MazeProblem:
         y = 0
 
         for row in self.maze:
+            x = 0
             for point in row:
                 if point is "*":
                     self.initial = (x, y)
@@ -75,16 +78,17 @@ class MazeProblem:
     # [(action1, result(action1, s), ...]
     # corresponding to allowable actions of the given state, as well
     # as the next state the action leads to
+
     def transitions(self, state):
         # DONE: Implement as intended
         transition_list = []
-        if self.maze[state[1]][state[0] % 5 - 1] is not "X":
+        if self.maze[state[1]][state[0] - 1] is not "X":
             transition_list.append(("L", (state[0]-1, state[1])))
-        if self.maze[state[1] - 1][state[0] % 5] is not "X":
+        if self.maze[state[1] - 1][state[0]] is not "X":
             transition_list.append(("U", (state[0], state[1]-1)))
-        if self.maze[state[1]][state[0] % 5+1] is not "X":
+        if self.maze[state[1]][state[0]+1] is not "X":
             transition_list.append(("R", (state[0]+1, state[1])))
-        if self.maze[state[1] + 1][state[0] % 5] is not "X":
+        if self.maze[state[1] + 1][state[0]] is not "X":
             transition_list.append(("D", (state[0], state[1]+1)))
         return transition_list
 
@@ -93,6 +97,7 @@ class MazeProblem:
     # isSoln = true if the given sequence of actions of the format:
     # [a1, a2, ...] successfully navigates to goal state from the initial state
     # If NOT a solution, return a cost of -1
+
     def solnTest(self, soln):
         trans = {"U": (0, -1), "D": (0, 1), "L": (-1, 0), "R": (1, 0)}
         s = self.initial
