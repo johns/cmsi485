@@ -8,16 +8,17 @@ sequence of actions) that takes the agent from the initial state to the
 optimal goal state.
 
 This task is done in the Pathfinder.solve method, as parameterized
-by a maze pathfinding problem, and is aided by the SearchTreeNode DS.
+by a maze pathfinding problem, and is aided by the search_tree_node DS.
 '''
 
-from MazeProblem import MazeProblem
-from SearchTreeNode import SearchTreeNode
 import unittest
 import queue
+from maze_problem import MazeProblem
+from search_tree_node import SearchTreeNode
 
 
 class Pathfinder:
+    """TODO"""
     # solve is parameterized by a maze pathfinding problem
     # (see MazeProblem.py and unit tests below), and will
     # return a list of actions that solves that problem. An
@@ -25,6 +26,7 @@ class Pathfinder:
     # ["U", "R", "R", "U"]
 
     def action_list(node):
+        """TODO"""
         actions = []
         current_node = node
         while current_node.parent is not None:
@@ -34,45 +36,51 @@ class Pathfinder:
         return actions
 
     def solve(problem):
+        """TODO"""
         next_states = queue.Queue(maxsize=0)
         action_node = SearchTreeNode(problem.initial, None, None)
-        parentNode = action_node
+        parent_node = action_node
 
         while True:
-            for transition in problem.transitions(parentNode.state):
-                action_node = SearchTreeNode(transition[1], transition[0], parentNode)
+            for transition in problem.transitions(parent_node.state):
+                action_node = SearchTreeNode(transition[1], transition[0], parent_node)
                 next_states.put(action_node)
-                if problem.goalTest(action_node.state):
+                if problem.goal_test(action_node.state):
                     return Pathfinder.action_list(action_node)
-            parentNode = next_states.get()
+            parent_node = next_states.get()
 
 
 class PathfinderTests(unittest.TestCase):
+    """TODO"""
     def test_maze0(self):
+        """TODO"""
         maze = ["XXX", "X*X", "XGX", "XXX"]
         problem = MazeProblem(maze)
         soln = Pathfinder.solve(problem)
-        solnTest = problem.solnTest(soln)
-        self.assertTrue(solnTest[1])
-        self.assertEqual(solnTest[0], 1)
+        soln_test = problem.soln_test(soln)
+        self.assertTrue(soln_test[1])
+        self.assertEqual(soln_test[0], 1)
 
     def test_maze1(self):
+        """TODO"""
         maze = ["XXXXX", "X..GX", "X...X", "X*..X", "XXXXX"]
         problem = MazeProblem(maze)
         soln = Pathfinder.solve(problem)
-        solnTest = problem.solnTest(soln)
-        self.assertTrue(solnTest[1])
-        self.assertEqual(solnTest[0], 4)
+        soln_test = problem.soln_test(soln)
+        self.assertTrue(soln_test[1])
+        self.assertEqual(soln_test[0], 4)
 
     def test_maze2(self):
+        """TODO"""
         maze = ["XXXXX", "XG..X", "XX..X", "X*..X", "XXXXX"]
         problem = MazeProblem(maze)
         soln = Pathfinder.solve(problem)
-        solnTest = problem.solnTest(soln)
-        self.assertTrue(solnTest[1])
-        self.assertEqual(solnTest[0], 4)
+        soln_test = problem.soln_test(soln)
+        self.assertTrue(soln_test[1])
+        self.assertEqual(soln_test[0], 4)
 
     def test_maze3(self):
+        """TODO"""
         maze = ["XXXXX",
                 "X..GX",
                 "X...X",
@@ -80,11 +88,12 @@ class PathfinderTests(unittest.TestCase):
                 "XXXXX"]
         problem = MazeProblem(maze)
         soln = Pathfinder.solve(problem)
-        solnTest = problem.solnTest(soln)
-        self.assertTrue(solnTest[1])
-        self.assertEqual(solnTest[0], 4)
+        soln_test = problem.soln_test(soln)
+        self.assertTrue(soln_test[1])
+        self.assertEqual(soln_test[0], 4)
 
     def test_maze4(self):
+        """TODO"""
         maze = ["XXXXXX",
                 "X.XXGX",
                 "X.X..X",
@@ -92,11 +101,12 @@ class PathfinderTests(unittest.TestCase):
                 "XXXXXX"]
         problem = MazeProblem(maze)
         soln = Pathfinder.solve(problem)
-        solnTest = problem.solnTest(soln)
-        self.assertTrue(solnTest[1])
-        self.assertEqual(solnTest[0], 5)
+        soln_test = problem.soln_test(soln)
+        self.assertTrue(soln_test[1])
+        self.assertEqual(soln_test[0], 5)
 
     def test_maze5(self):
+        """TODO"""
         maze = ["XXXXXXXX",
                 "X.....*X",
                 "X.XXXXXX",
@@ -108,11 +118,12 @@ class PathfinderTests(unittest.TestCase):
                 "XXXXXXXX"]
         problem = MazeProblem(maze)
         soln = Pathfinder.solve(problem)
-        solnTest = problem.solnTest(soln)
-        self.assertTrue(solnTest[1])
-        self.assertEqual(solnTest[0], 16)
+        soln_test = problem.soln_test(soln)
+        self.assertTrue(soln_test[1])
+        self.assertEqual(soln_test[0], 16)
 
     def test_maze6(self):
+        """TODO"""
         maze = ["XXXXXXXXXX",
                 "X........X",
                 "XXX.X.*.XX",
@@ -126,11 +137,12 @@ class PathfinderTests(unittest.TestCase):
         problem = MazeProblem(maze)
         soln = Pathfinder.solve(problem)
 
-        solnTest = problem.solnTest(soln)
-        self.assertTrue(solnTest[1])
-        self.assertEqual(solnTest[0], 3)
+        soln_test = problem.soln_test(soln)
+        self.assertTrue(soln_test[1])
+        self.assertEqual(soln_test[0], 3)
 
     def test_maze7(self):
+        """TODO"""
         maze = ["XXXXXXXXXX",
                 "X*.......X",
                 "XXX.X...XX",
@@ -144,11 +156,12 @@ class PathfinderTests(unittest.TestCase):
         problem = MazeProblem(maze)
         soln = Pathfinder.solve(problem)
 
-        solnTest = problem.solnTest(soln)
-        self.assertTrue(solnTest[1])
-        self.assertEqual(solnTest[0], 11)
+        soln_test = problem.soln_test(soln)
+        self.assertTrue(soln_test[1])
+        self.assertEqual(soln_test[0], 11)
 
     def test_maze8(self):
+        """TODO"""
         maze = ["XXXXXXXXXX",
                 "X........X",
                 "XXX.XX.X.X",
@@ -161,11 +174,12 @@ class PathfinderTests(unittest.TestCase):
                 "XXXXXXXXXX"]
         problem = MazeProblem(maze)
         soln = Pathfinder.solve(problem)
-        solnTest = problem.solnTest(soln)
-        self.assertTrue(solnTest[1])
-        self.assertEqual(solnTest[0], 7)
+        soln_test = problem.soln_test(soln)
+        self.assertTrue(soln_test[1])
+        self.assertEqual(soln_test[0], 7)
 
     def test_maze9(self):
+        """TODO"""
         maze = ["XXXXXXXXXXXXX",
                 "X........XX.X",
                 "XXX.XX.X.XX.X",
@@ -178,9 +192,9 @@ class PathfinderTests(unittest.TestCase):
                 "XXXXXXXXXXXXX"]
         problem = MazeProblem(maze)
         soln = Pathfinder.solve(problem)
-        solnTest = problem.solnTest(soln)
-        self.assertTrue(solnTest[1])
-        self.assertEqual(solnTest[0], 10)
+        soln_test = problem.soln_test(soln)
+        self.assertTrue(soln_test[1])
+        self.assertEqual(soln_test[0], 10)
 
 
 if __name__ == '__main__':

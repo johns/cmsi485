@@ -46,7 +46,7 @@ then the transitions for that s = (1, 1) would be:
 
 
 class MazeProblem:
-
+    """TODO"""
     # MazeProblem Constructor:
     # Constructs a new pathfinding problem from a maze, described above
     def __init__(self, maze):
@@ -54,24 +54,25 @@ class MazeProblem:
         self.initial = None
         self.goals = []
 
-        x = 0
-        y = 0
+        x_cord = 0
+        y_cord = 0
 
         for row in self.maze:
-            x = 0
+            x_cord = 0
             for point in row:
                 if point is "*":
-                    self.initial = (x, y)
+                    self.initial = (x_cord, y_cord)
                 if point is "G":
-                    self.goals.append((x, y))
-                x += 1
-            y += 1
+                    self.goals.append((x_cord, y_cord))
+                x_cord += 1
+            y_cord += 1
 
         # DONE: Populate initial and goals attributes
 
-    # goalTest is parameterized by a state, and
+    # goal_test is parameterized by a state, and
     # returns True if the given state is a goal, False otherwise
-    def goalTest(self, state):
+    def goal_test(self, state):
+        """TODO"""
         return state in self.goals
 
     # transitions returns a list of tuples in the format:
@@ -80,6 +81,7 @@ class MazeProblem:
     # as the next state the action leads to
 
     def transitions(self, state):
+        """TODO"""
         # DONE: Implement as intended
         transition_list = []
         if self.maze[state[1]][state[0] - 1] is not "X":
@@ -92,17 +94,18 @@ class MazeProblem:
             transition_list.append(("D", (state[0], state[1]+1)))
         return transition_list
 
-    # solnTest will return a tuple of the format (cost, isSoln) where:
+    # soln_test will return a tuple of the format (cost, isSoln) where:
     # cost = the total cost of the solution,
     # isSoln = true if the given sequence of actions of the format:
     # [a1, a2, ...] successfully navigates to goal state from the initial state
     # If NOT a solution, return a cost of -1
 
-    def solnTest(self, soln):
+    def soln_test(self, soln):
+        """TODO"""
         trans = {"U": (0, -1), "D": (0, 1), "L": (-1, 0), "R": (1, 0)}
-        s = self.initial
-        for m in soln:
-            s = (s[0] + trans[m][0], s[1] + trans[m][1])
-            if self.maze[s[1]][s[0]] == "X":
+        point = self.initial
+        for row in soln:
+            point = (point[0] + trans[row][0], point[1] + trans[row][1])
+            if self.maze[point[1]][point[0]] == "X":
                 return (-1, False)
-        return (len(soln), self.goalTest(s))
+        return (len(soln), self.goal_test(point))

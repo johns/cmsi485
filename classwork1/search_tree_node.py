@@ -16,7 +16,7 @@ The parent of this node in the search tree.
 - The parent's value is a reference to the parent node otherwise
 '''
 class SearchTreeNode:
-
+    """"Create node structure for BFS Tree"""
     def __init__(self, state, action, parent):
         self.state = state
         self.action = action
