@@ -58,17 +58,17 @@ class MazeProblem:
     # as the next state the action leads to
     def transitions(self, state):
         """TODO"""
-        s = state
-        possible = [("U", (s[0], s[1]-1)), ("D", (s[0], s[1]+1)), ("L", (s[0]-1, s[1])), ("R", (s[0]+1, s[1]))]
+        stt = state
+        possible = [("U", (stt[0], stt[1]-1)), ("D", (stt[0], stt[1]+1)), ("L", (stt[0]-1, stt[1])), ("R", (stt[0]+1, stt[1]))]
         return [(s[0], self.cost(s[1]), s[1]) for s in possible if self.maze[s[1][1]][s[1][0]] != "X"]
 
     # cost returns the cost of moving onto the given state, and employs
     # the MazeProblem's costMap
     def cost(self, state):
         """TODO"""
-        cm = MazeProblem.costMap
+        cost_map = MazeProblem.costMap
         cell = self.maze[state[1]][state[0]]
-        return cm[cell] if cell in cm else 1
+        return cost_map[cell] if cell in cost_map else 1
 
     # soln_test will return a tuple of the format (cost, isSoln) where:
     # cost = the total cost of the solution,
@@ -79,13 +79,13 @@ class MazeProblem:
         """TODO"""
         trans = {"U": (0, -1), "D": (0, 1), "L": (-1, 0), "R": (1, 0)}
         targets = len(goals)
-        s = initial
-        tc = 0
-        for m in soln:
-            s = (s[0] + trans[m][0], s[1] + trans[m][1])
-            tc += self.cost(s)
-            if s in goals:
+        state = initial
+        total_cost = 0
+        for row in soln:
+            state = (state[0] + trans[row][0], state[1] + trans[row][1])
+            total_cost += self.cost(state)
+            if state in goals:
                 targets -= 1
-            if self.maze[s[1]][s[0]] == "X":
+            if self.maze[state[1]][state[0]] == "X":
                 return (-1, False)
-        return (tc, targets == 0)
+        return (total_cost, targets == 0)
