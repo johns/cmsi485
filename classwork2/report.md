@@ -1,5 +1,5 @@
 ##  Classwork 2: Mad Props
-####  Sam Chami, Jackson Myers, and John Scott
+####  Jackson Myers, John Scott, and Ben Smith
 
 
 ###  Problem 1
