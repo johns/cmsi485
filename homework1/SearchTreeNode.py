@@ -25,7 +25,7 @@ optimal solution
 '''
 
 class SearchTreeNode:
-    """TODO"""
+    """Create node structure for A* Search Tree"""
 
     def __init__(self, state, action, parent, total_cost, heuristic_cost):
         self.state = state
@@ -33,3 +33,6 @@ class SearchTreeNode:
         self.parent = parent
         self.total_cost = total_cost
         self.heuristic_cost = heuristic_cost
+
+    def __lt__(self, other):
+        return self.total_cost + self.heuristic_cost < other.total_cost + other.heuristic_cost
