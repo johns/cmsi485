@@ -78,14 +78,14 @@ class MazeProblem:
     def soln_test(self, soln, initial, goals):
         """TODO"""
         trans = {"U": (0, -1), "D": (0, 1), "L": (-1, 0), "R": (1, 0)}
-        targets = len(goals)
+        targets = goals.copy()
         state = initial
         total_cost = 0
         for row in soln:
             state = (state[0] + trans[row][0], state[1] + trans[row][1])
             total_cost += self.cost(state)
             if state in goals:
-                targets -= 1
+                targets.remove(state)
             if self.maze[state[1]][state[0]] == "X":
                 return (-1, False)
-        return (total_cost, targets == 0)
+        return (total_cost, targets == [])
