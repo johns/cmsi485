@@ -1,4 +1,5 @@
 '''
+Sam Chami
 John Scott
 
 maze_knowledge_base.py
