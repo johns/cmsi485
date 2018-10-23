@@ -20,10 +20,26 @@ class MazeClause:
         argument props is a list of MazePropositions, like:
         [(("X", (1, 1)), True), (("X", (2, 1)), True), (("Y", (1, 2)), False)]
         """
-        self.props = {}
-        self.valid = False
+        self.props = set()
+        self.valid = True
+
+        for prop in props:
+            if prop not in self.props:
+                self.props.add(prop)
+
+        for prop in self.props:
+            for checked_prop in self.props:
+                if prop[0] is checked_prop[0] and prop[1] is not checked_prop[1]:
+                    self.props.remove(prop)
+                    self.props.remove(checked_prop)
+
+        for prop in self.props:
+            if not (prop[1]):
+                self.valid = False
+
         # TODO: Process list of propositions to make a correctly
         # formatted MazeClause
+
 
     def get_prop(self, prop):
         """
@@ -42,9 +58,8 @@ class MazeClause:
           - True if this clause is logically equivalent with True
           - False otherwise
         """
-        # TODO: This is currently implemented incorrectly; see
-        # spec for details!
-        return False
+        return self.valid
+
 
     def is_empty(self):
         """
@@ -53,9 +68,8 @@ class MazeClause:
           - False otherwise
         (NB: valid clauses are not empty)
         """
-        # TODO: This is currently implemented incorrectly; see
-        # spec for details!
-        return False
+        return self.is_valid() or len(self.props) is 0
+
 
     def __eq__(self, other):
         """
