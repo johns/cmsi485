@@ -21,24 +21,28 @@ class MazeClause:
         [(("X", (1, 1)), True), (("X", (2, 1)), True), (("Y", (1, 2)), False)]
         """
         self.props = set()
-        self.valid = True
+        self.valid = len(props) > 0
 
         for prop in props:
             if prop not in self.props:
                 self.props.add(prop)
 
+        props_to_remove = set()
+
         for prop in self.props:
             for checked_prop in self.props:
-                if prop[0] is checked_prop[0] and prop[1] is not checked_prop[1]:
-                    self.props.remove(prop)
-                    self.props.remove(checked_prop)
+                if (prop[0] == checked_prop[0]) and (prop[1] is not checked_prop[1]):
+                    # print(checked_prop)
+                    props_to_remove.add(prop)
+                    props_to_remove.add(checked_prop)
+                    break
+
+        for props in props_to_remove:
+            self.props.remove(props)
 
         for prop in self.props:
-            if not (prop[1]):
+            if not prop[1]:
                 self.valid = False
-
-        # TODO: Process list of propositions to make a correctly
-        # formatted MazeClause
 
 
     def get_prop(self, prop):
@@ -48,9 +52,14 @@ class MazeClause:
           - True if the requested prop is positive in the clause
           - False if the requested prop is negated in the clause
         """
-        # TODO: This is currently implemented incorrectly; see
-        # spec for details!
-        return False
+
+        if (prop, True) in self.props:
+            return True
+        elif (prop, False) in self.props:
+            return False
+        else:
+            return None
+
 
     def is_valid(self):
         """
@@ -68,7 +77,7 @@ class MazeClause:
           - False otherwise
         (NB: valid clauses are not empty)
         """
-        return self.is_valid() or len(self.props) is 0
+        return (not self.is_valid()) and len(self.props) is 0
 
 
     def __eq__(self, other):
@@ -101,8 +110,26 @@ class MazeClause:
         inference engine)
         """
         results = set()
-        # TODO: This is currently implemented incorrectly; see
-        # spec for details!
+        prop_list = []
+        include_unique = False
+
+        for c1_prop in c1.props:
+            for c2_prop in c2.props:
+                if (c1_prop[0][0] is c2_prop[0][0]) and (c1_prop[1] is c2_prop[1]):
+                    include_unique = True
+
+        if include_unique:
+            prop_list.extend(c1.props)
+            prop_list.extend(c2.props)
+            print("-----------------")
+            print(c1.props)
+            print(c2.props)
+            print("-")
+
+            c3 = MazeClause(prop_list)
+            print(c3.props)
+
+            results.add(c3)
         return results
 
 
