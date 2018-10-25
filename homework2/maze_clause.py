@@ -1,4 +1,7 @@
-'''
+"""
+
+CMSI485: Homework 2.
+
 Sam Chami
 John Scott
 
@@ -8,42 +11,28 @@ Specifies a Propositional Logic Clause formatted specifically
 for Grid Maze Pathfinding problems. Clauses are a disjunction of
 MazePropositions (2-tuples of (symbol, location)) mapped to
 their negated status in the sentence.
-'''
+"""
+
 import unittest
 
+
 class MazeClause:
-    """TODO"""
 
     def __init__(self, props):
         """
-        Constructor parameterized by the propositions within this clause;
+        Constructor parameterized by the propositions within this clause.
         argument props is a list of MazePropositions, like:
         [(("X", (1, 1)), True), (("X", (2, 1)), True), (("Y", (1, 2)), False)]
         """
-        self.props = set()
-        self.valid = len(props) > 0
-
+        self.props = {}
         for prop in props:
-            if prop not in self.props:
-                self.props.add(prop)
+            if prop[0] in self.props:
+                if self.props[prop[0]] is not prop[1]:
+                    del self.props[prop[0]]
+            else:
+                self.props[prop[0]] = prop[1]
 
-        props_to_remove = set()
-
-        for prop in self.props:
-            for checked_prop in self.props:
-                if (prop[0] == checked_prop[0]) and (prop[1] is not checked_prop[1]):
-                    # print(checked_prop)
-                    props_to_remove.add(prop)
-                    props_to_remove.add(checked_prop)
-                    break
-
-        for props in props_to_remove:
-            self.props.remove(props)
-
-        for prop in self.props:
-            if not prop[1]:
-                self.valid = False
-
+        self.valid = all(value is True for value in self.props.values()) and len(self.props) > 0
 
     def get_prop(self, prop):
         """
@@ -53,13 +42,10 @@ class MazeClause:
           - False if the requested prop is negated in the clause
         """
 
-        if (prop, True) in self.props:
-            return True
-        elif (prop, False) in self.props:
-            return False
+        if prop in self.props:
+            return self.props[prop]
         else:
             return None
-
 
     def is_valid(self):
         """
@@ -68,7 +54,6 @@ class MazeClause:
           - False otherwise
         """
         return self.valid
-
 
     def is_empty(self):
         """
@@ -111,25 +96,26 @@ class MazeClause:
         """
         results = set()
         prop_list = []
-        include_unique = False
+        equalness = False
 
-        for c1_prop in c1.props:
-            for c2_prop in c2.props:
-                if (c1_prop[0][0] is c2_prop[0][0]) and (c1_prop[1] is c2_prop[1]):
-                    include_unique = True
+        for c1_key, c1_value in c1.props.items():
+            for c2_key, c2_value in c2.props.items():
+                if c1_key[0] is c2_key[0] and c1_value is c2_value:
+                    equalness = True
+            prop_list.append((c1_key, c1_value))
 
-        if include_unique:
-            prop_list.extend(c1.props)
-            prop_list.extend(c2.props)
-            print("-----------------")
-            print(c1.props)
-            print(c2.props)
-            print("-")
+        for c2_key, c2_value in c2.props.items():
+            prop_list.append((c2_key, c2_value))
 
-            c3 = MazeClause(prop_list)
-            print(c3.props)
+        c3 = MazeClause(prop_list)
+        print(prop_list)
+        print(c3.props)
 
+        if equalness and not (c3 == c1 or c3 == c2):
+            print("FIRES")
             results.add(c3)
+
+        print(len(results))
         return results
 
 
