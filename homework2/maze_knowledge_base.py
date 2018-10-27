@@ -9,7 +9,9 @@ Logic Knowledge Base for use in Grid Maze pathfinding problems
 with side-information.
 '''
 import unittest
+import itertools
 from maze_clause import MazeClause
+import copy
 
 
 class MazeKnowledgeBase:
@@ -24,26 +26,32 @@ class MazeKnowledgeBase:
         Note: we expect that no clause added this way will ever
         make the KB inconsistent (you need not check for this)
         """
-        # TODO: This is currently implemented incorrectly; see
-        # spec for details!
-        return
+        self.clauses.add(clause)
 
     def ask(self, query):
         """
         Given a MazeClause query, returns True if the KB entails
         the query, False otherwise
         """
-        # TODO: Implement resolution inference here!
-        # This is currently implemented incorrectly; see
-        # spec for details!
 
-            if new.issubset(resolution):
+        inferred = set()
+        clause_copy = copy.deepcopy(self.clauses)
+
+        for key, value in query.props.items():
+            clause_copy.add(MazeClause([(key, not value)]))
+
+        while True:
+            for combo in itertools.combinations(clause_copy, 2):
+                resolvents = MazeClause.resolve(combo[0], combo[1])
+                if MazeClause([]) in resolvents:
+                    return True
+                inferred = inferred | resolvents
+
+            if inferred.issubset(clause_copy):
                 return False
-            resolution.update(new)
 
+            clause_copy = clause_copy | inferred
 
-
-        return False
 
 
 class MazeKnowledgeBaseTests(unittest.TestCase):
