@@ -1,4 +1,4 @@
-'''
+"""
 Sam Chami
 John Scott
 
@@ -7,15 +7,16 @@ maze_knowledge_base.py
 Specifies a simple, Conjunctive Normal Form Propositional
 Logic Knowledge Base for use in Grid Maze pathfinding problems
 with side-information.
-'''
-import unittest
-import itertools
-from maze_clause import MazeClause
+"""
 import copy
-
+import itertools
+import unittest
+from maze_clause import MazeClause
 
 class MazeKnowledgeBase:
-    """TODO"""
+    """
+    Class that represents a Knowledge Base for solving mazes
+    """
 
     def __init__(self):
         self.clauses = set()
@@ -53,24 +54,23 @@ class MazeKnowledgeBase:
             clause_copy = clause_copy | inferred
 
 
-
 class MazeKnowledgeBaseTests(unittest.TestCase):
-    """TODO"""
+    """Unit tests for maze_knowledge_base.py"""
     def test_mazekb1(self):
-        """TODO"""
+        """Unit test #1"""
         kb = MazeKnowledgeBase()
         kb.tell(MazeClause([(("X", (1, 1)), True)]))
         self.assertTrue(kb.ask(MazeClause([(("X", (1, 1)), True)])))
 
     def test_mazekb2(self):
-        """TODO"""
+        """Unit test #2"""
         kb = MazeKnowledgeBase()
         kb.tell(MazeClause([(("X", (1, 1)), False)]))
         kb.tell(MazeClause([(("X", (1, 1)), True), (("Y", (1, 1)), True)]))
         self.assertTrue(kb.ask(MazeClause([(("Y", (1, 1)), True)])))
 
     def test_mazekb3(self):
-        """TODO"""
+        """Unit test #3"""
         kb = MazeKnowledgeBase()
         kb.tell(MazeClause([(("X", (1, 1)), False), (("Y", (1, 1)), True)]))
         kb.tell(MazeClause([(("Y", (1, 1)), False), (("Z", (1, 1)), True)]))
@@ -80,7 +80,7 @@ class MazeKnowledgeBaseTests(unittest.TestCase):
         self.assertFalse(kb.ask(MazeClause([(("Y", (1, 1)), False)])))
 
     def test_mazekb4(self):
-        """TODO"""
+        """Unit test #4"""
         kb = MazeKnowledgeBase()
         kb.tell(MazeClause([(("X", (1, 1)), False), (("Y", (1, 1)), True), (("W", (1, 1)), True)]))
         kb.tell(MazeClause([(("W", (1, 1)), False), (("Z", (1, 1)), False), (("S", (1, 1)), True)]))
@@ -91,7 +91,7 @@ class MazeKnowledgeBaseTests(unittest.TestCase):
         self.assertTrue(kb.ask(MazeClause([(("Z", (1, 1)), False)])))
 
     def test_mazekb5(self):
-        """TODO"""
+        """Unit test #5"""
         kb = MazeKnowledgeBase()
         kb.tell(MazeClause([(("X", (1, 1)), False), (("Y", (1, 1)), True), (("W", (1, 1)), True)]))
         kb.tell(MazeClause([(("W", (1, 1)), False), (("Z", (1, 1)), False), (("S", (1, 1)), True)]))
@@ -102,14 +102,13 @@ class MazeKnowledgeBaseTests(unittest.TestCase):
         self.assertTrue(kb.ask(MazeClause([(("Z", (1, 1)), True), (("W", (1, 1)), True)])))
 
     def test_mazekb6(self):
-        """TODO"""
+        """Unit test #6"""
         kb = MazeKnowledgeBase()
         kb.tell(MazeClause([(("X", (1, 1)), False), (("Y", (1, 1)), False), (("Z", (1, 1)), False)]))
         kb.tell(MazeClause([(("X", (1, 1)), True)]))
         self.assertFalse(kb.ask(MazeClause([(("Z", (1, 1)), False)])))
         kb.tell(MazeClause([(("Y", (1, 1)), True)]))
         self.assertTrue(kb.ask(MazeClause([(("Z", (1, 1)), False)])))
-
 
 if __name__ == "__main__":
     unittest.main()

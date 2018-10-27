@@ -1,7 +1,4 @@
 """
-
-CMSI485: Homework 2.
-
 Sam Chami
 John Scott
 
@@ -12,11 +9,12 @@ for Grid Maze Pathfinding problems. Clauses are a disjunction of
 MazePropositions (2-tuples of (symbol, location)) mapped to
 their negated status in the sentence.
 """
-
 import unittest
 
-
 class MazeClause:
+    """
+    Class that represents clauses for solving mazes
+    """
 
     def __init__(self, props):
         """
@@ -32,10 +30,9 @@ class MazeClause:
                 if self.props[prop[0]] is not prop[1]:
                     self.props.clear()
                     self.valid = True
+                    break
             else:
                 self.props[prop[0]] = prop[1]
-
-
 
     def get_prop(self, prop):
         """
@@ -47,8 +44,7 @@ class MazeClause:
 
         if prop in self.props:
             return self.props[prop]
-        else:
-            return None
+        return None
 
     def is_valid(self):
         """
@@ -66,7 +62,6 @@ class MazeClause:
         (NB: valid clauses are not empty)
         """
         return (not self.is_valid()) and len(self.props) is 0
-
 
     def __eq__(self, other):
         """
@@ -107,7 +102,7 @@ class MazeClause:
                     uni.remove((c1_key, c1_value))
                     uni.remove((c2_key, c2_value))
                     c3 = MazeClause(list(uni))
-                    if not (c3.is_valid()):
+                    if not c3.is_valid():
                         results.add(c3)
                     return results
 
@@ -115,9 +110,9 @@ class MazeClause:
 
 
 class MazeClauseTests(unittest.TestCase):
-    """TODO"""
+    """Unit tests for maze_clause.py"""
     def test_mazeprops1(self):
-        """TODO"""
+        """Unit test #1"""
         mc = MazeClause([(("X", (1, 1)), True), (("X", (2, 1)), True), (("Y", (1, 2)), False)])
         self.assertTrue(mc.get_prop(("X", (1, 1))))
         self.assertTrue(mc.get_prop(("X", (2, 1))))
@@ -126,33 +121,33 @@ class MazeClauseTests(unittest.TestCase):
         self.assertFalse(mc.is_empty())
 
     def test_mazeprops2(self):
-        """TODO"""
+        """Unit test #2"""
         mc = MazeClause([(("X", (1, 1)), True), (("X", (1, 1)), True)])
         self.assertTrue(mc.get_prop(("X", (1, 1))))
         self.assertFalse(mc.is_empty())
 
     def test_mazeprops3(self):
-        """TODO"""
+        """Unit test #3"""
         mc = MazeClause([(("X", (1, 1)), True), (("Y", (2, 1)), True), (("X", (1, 1)), False)])
         self.assertTrue(mc.is_valid())
         self.assertTrue(mc.get_prop(("X", (1, 1))) is None)
         self.assertFalse(mc.is_empty())
 
     def test_mazeprops4(self):
-        """TODO"""
+        """Unit test #4"""
         mc = MazeClause([])
         self.assertFalse(mc.is_valid())
         self.assertTrue(mc.is_empty())
 
     def test_mazeprops5(self):
-        """TODO"""
+        """Unit test #5"""
         mc1 = MazeClause([(("X", (1, 1)), True)])
         mc2 = MazeClause([(("X", (1, 1)), True)])
         res = MazeClause.resolve(mc1, mc2)
         self.assertEqual(len(res), 0)
 
     def test_mazeprops6(self):
-        """TODO"""
+        """Unit test #6"""
         mc1 = MazeClause([(("X", (1, 1)), True)])
         mc2 = MazeClause([(("X", (1, 1)), False)])
         res = MazeClause.resolve(mc1, mc2)
@@ -160,7 +155,7 @@ class MazeClauseTests(unittest.TestCase):
         self.assertTrue(MazeClause([]) in res)
 
     def test_mazeprops7(self):
-        """TODO"""
+        """Unit test #7"""
         mc1 = MazeClause([(("X", (1, 1)), True), (("Y", (1, 1)), True)])
         mc2 = MazeClause([(("X", (1, 1)), False), (("Y", (2, 2)), True)])
         res = MazeClause.resolve(mc1, mc2)
@@ -168,21 +163,21 @@ class MazeClauseTests(unittest.TestCase):
         self.assertTrue(MazeClause([(("Y", (1, 1)), True), (("Y", (2, 2)), True)]) in res)
 
     def test_mazeprops8(self):
-        """TODO"""
+        """Unit test #8"""
         mc1 = MazeClause([(("X", (1, 1)), True), (("Y", (1, 1)), False)])
         mc2 = MazeClause([(("X", (1, 1)), False), (("Y", (1, 1)), True)])
         res = MazeClause.resolve(mc1, mc2)
         self.assertEqual(len(res), 0)
 
     def test_mazeprops9(self):
-        """TODO"""
+        """Unit test #9"""
         mc1 = MazeClause([(("X", (1, 1)), True), (("Y", (1, 1)), False), (("Z", (1, 1)), True)])
         mc2 = MazeClause([(("X", (1, 1)), False), (("Y", (1, 1)), True), (("W", (1, 1)), False)])
         res = MazeClause.resolve(mc1, mc2)
         self.assertEqual(len(res), 0)
 
     def test_mazeprops10(self):
-        """TODO"""
+        """Unit test #10"""
         mc1 = MazeClause([(("X", (1, 1)), True), (("Y", (1, 1)), False), (("Z", (1, 1)), True)])
         mc2 = MazeClause([(("X", (1, 1)), False), (("Y", (1, 1)), False), (("W", (1, 1)), False)])
         res = MazeClause.resolve(mc1, mc2)
