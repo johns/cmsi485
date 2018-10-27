@@ -104,11 +104,10 @@ class MazeClause:
             for c2_key, c2_value in c2.props.items():
                 if c1_key == c2_key and c1_value is not c2_value:
                     uni = c1.props.items() | c2.props.items()
-                    print(uni)
                     uni.remove((c1_key, c1_value))
                     uni.remove((c2_key, c2_value))
                     c3 = MazeClause(list(uni))
-                    if not (c3.is_valid() or c3.is_empty()):
+                    if not (c3.is_valid()):
                         results.add(c3)
                     return results
 
