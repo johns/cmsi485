@@ -36,6 +36,13 @@ class MazeKnowledgeBase:
         # TODO: Implement resolution inference here!
         # This is currently implemented incorrectly; see
         # spec for details!
+
+            if new.issubset(resolution):
+                return False
+            resolution.update(new)
+
+
+
         return False
 
 

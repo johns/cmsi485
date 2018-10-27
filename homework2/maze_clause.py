@@ -25,14 +25,17 @@ class MazeClause:
         [(("X", (1, 1)), True), (("X", (2, 1)), True), (("Y", (1, 2)), False)]
         """
         self.props = {}
+        self.valid = False
+
         for prop in props:
             if prop[0] in self.props:
                 if self.props[prop[0]] is not prop[1]:
-                    del self.props[prop[0]]
+                    self.props.clear()
+                    self.valid = True
             else:
                 self.props[prop[0]] = prop[1]
 
-        self.valid = all(value is True for value in self.props.values()) and len(self.props) > 0
+
 
     def get_prop(self, prop):
         """
@@ -95,27 +98,20 @@ class MazeClause:
         inference engine)
         """
         results = set()
-        prop_list = []
-        equalness = False
+        uni = set()
 
         for c1_key, c1_value in c1.props.items():
             for c2_key, c2_value in c2.props.items():
-                if c1_key[0] is c2_key[0] and c1_value is c2_value:
-                    equalness = True
-            prop_list.append((c1_key, c1_value))
+                if c1_key == c2_key and c1_value is not c2_value:
+                    uni = c1.props.items() | c2.props.items()
+                    print(uni)
+                    uni.remove((c1_key, c1_value))
+                    uni.remove((c2_key, c2_value))
+                    c3 = MazeClause(list(uni))
+                    if not (c3.is_valid() or c3.is_empty()):
+                        results.add(c3)
+                    return results
 
-        for c2_key, c2_value in c2.props.items():
-            prop_list.append((c2_key, c2_value))
-
-        c3 = MazeClause(prop_list)
-        print(prop_list)
-        print(c3.props)
-
-        if equalness and not (c3 == c1 or c3 == c2):
-            print("FIRES")
-            results.add(c3)
-
-        print(len(results))
         return results
 
 
