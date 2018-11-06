@@ -1,5 +1,5 @@
 ##  Homework 3: Having a Bayes Ball
-####  John Scott
+####  Sam Chami and John Scott
 
 
 ###  I. Bayesian Network Modeling
