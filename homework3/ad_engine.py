@@ -63,8 +63,7 @@ class AdEngine:
 
 class AdEngineTests(unittest.TestCase):
     """docstring"""
-
-    def test_defendotron_ad_engine(self):
+    def test_defendotron_ad_engine_t1(self):
         """docstring"""
         engine = AdEngine(
             data_file='hw3_data.csv',
@@ -76,9 +75,28 @@ class AdEngineTests(unittest.TestCase):
             # example; see format of util_map in spec and above!
             util_map={}
         )
-        self.assertEqual(engine.decide({"G": 0}), {"Ad1": 0, "Ad2": 1})
-        self.assertEqual(engine.decide({"F": 1}), {"Ad1": 1, "Ad2": 0})
+        self.assertEqual(engine.decide({"T": 1}), {"Ad1": 0, "Ad2": 1})
+        self.assertIn(engine.decide({"F": 1}), [{"Ad1": 1, "Ad2": 0}, {"Ad1": 1, "Ad2": 1}])
         self.assertEqual(engine.decide({"G": 1, "T": 0}), {"Ad1": 1, "Ad2": 1})
+
+    def test_defendotron_ad_engine_t2(self):
+        """docstring"""
+        engine = AdEngine(
+            data_file='hw3_data.csv',
+            # [!] Note: in this example, say we are only deciding upon the ad
+            # video (Ad1); our engine's results should adapt accordingly (see
+            # tests below)
+            dec_vars=["Ad1"],
+            # TODO: Current structure is blank; you need to fill this in using
+            # the results from the Tetrad analysis!
+            structure=(),
+            # TODO: Decide what the utility map should be for the Defendotron
+            # example; see format of util_map in spec and above!
+            util_map={}
+        )
+        self.assertEqual(engine.decide({"A": 1}), {"Ad1": 0})
+        self.assertEqual(engine.decide({"P": 1, "A": 0}), {"Ad1": 1})
+        self.assertIn(engine.decide({"A": 1, "G": 0, "T": 1}), [{"Ad1": 0}, {"Ad1": 1}])
 
 if __name__ == "__main__":
     unittest.main()
