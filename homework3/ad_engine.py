@@ -88,22 +88,7 @@ class AdEngineTests(unittest.TestCase):
 
             # TODO: Decide what the utility map should be for the Defendotron
             # example; see format of util_map in spec and above!
-            util_map=
-            {
-                "": {0: 20, 1: -10}
-            }
-
-            0: H    0.4012, 0.5988
-            1: I
-            2: Ad1  0.5026, 0.4974
-            3: G
-            4: S
-            5: P    0.4998, 0.5002
-            6: T
-            7: F
-            8: Ad2  0.5018, 0.4982
-            9: A    0.4998, 0.5002
-
+            util_map={"S": {0: 0, 1: 5000, 2: 17760}}
         )
         self.assertEqual(engine.decide({"T": 1}), {"Ad1": 0, "Ad2": 1})
         self.assertIn(engine.decide({"F": 1}), [{"Ad1": 1, "Ad2": 0}, {"Ad1": 1, "Ad2": 1}])
@@ -134,7 +119,7 @@ class AdEngineTests(unittest.TestCase):
 
             # TODO: Decide what the utility map should be for the Defendotron
             # example; see format of util_map in spec and above!
-            util_map={}
+            util_map={"S": {0: 0, 1: 5000, 2: 17760}}
         )
         self.assertEqual(engine.decide({"A": 1}), {"Ad1": 0})
         self.assertEqual(engine.decide({"P": 1, "A": 0}), {"Ad1": 1})
