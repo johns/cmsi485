@@ -43,7 +43,10 @@ class AdEngine:
         has a utility score of 20, and value 1 has a utility score of -10
         """
         # TODO! You decide the attributes and initialization of the BN!
-        return
+        self.data_file = data_file
+        self.structure = structure
+        self.dec_vars = dec_vars
+        self.util_map = util_map
 
     def decide(self, evidence):
         """
@@ -70,10 +73,37 @@ class AdEngineTests(unittest.TestCase):
             dec_vars=["Ad1", "Ad2"],
             # TODO: Current structure is blank; you need to fill this in using
             # the results from the Tetrad analysis!
-            structure=(),
+            structure=((), (0,), (), (2, 5,), (3, 7,), (), (5, 9,), (8, 9,), (), ()),
+            # Tuple Structure
+            # 0:H
+            # 1:I
+            # 2:Ad1
+            # 3:G
+            # 4:S
+            # 5:P
+            # 6:T
+            # 7:F
+            # 8:Ad2
+            # 9:A
+
             # TODO: Decide what the utility map should be for the Defendotron
             # example; see format of util_map in spec and above!
-            util_map={}
+            util_map=
+            {
+                "": {0: 20, 1: -10}
+            }
+
+            0: H    0.4012, 0.5988
+            1: I
+            2: Ad1  0.5026, 0.4974
+            3: G
+            4: S
+            5: P    0.4998, 0.5002
+            6: T
+            7: F
+            8: Ad2  0.5018, 0.4982
+            9: A    0.4998, 0.5002
+
         )
         self.assertEqual(engine.decide({"T": 1}), {"Ad1": 0, "Ad2": 1})
         self.assertIn(engine.decide({"F": 1}), [{"Ad1": 1, "Ad2": 0}, {"Ad1": 1, "Ad2": 1}])
@@ -89,7 +119,19 @@ class AdEngineTests(unittest.TestCase):
             dec_vars=["Ad1"],
             # TODO: Current structure is blank; you need to fill this in using
             # the results from the Tetrad analysis!
-            structure=(),
+            structure=((), (0,), (), (2, 5,), (3, 7,), (), (5, 9,), (8, 9,), (), ()),
+            # Tuple Structure
+            # 0:H
+            # 1:I
+            # 2:Ad1
+            # 3:G
+            # 4:S
+            # 5:P
+            # 6:T
+            # 7:F
+            # 8:Ad2
+            # 9:A
+
             # TODO: Decide what the utility map should be for the Defendotron
             # example; see format of util_map in spec and above!
             util_map={}
