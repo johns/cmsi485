@@ -42,10 +42,13 @@ class AdEngine:
         represents a utility node with single parent X whose value of 0
         has a utility score of 20, and value 1 has a utility score of -10
         """
-        # TODO! You decide the attributes and initialization of the BN!
+        data = np.genfromtxt(data_file, dtype=int, names=True, delimiter=',')
+        self.names = data.dtype.names
+        self.model = BayesianNetwork.from_structure(data.view((int, len(self.names())), structure=structure, state_names=self.names)) #wrong?
         self.data_file = data_file
         self.structure = structure
         self.dec_vars = dec_vars
+        self.dec_vars_values = [list(np.unique(data[x])) for x in dec_vars]
         self.util_map = util_map
 
     def decide(self, evidence):
@@ -60,7 +63,20 @@ class AdEngine:
         :return: dict of format: {"DecVar1": val1, "DecVar2": val2, ...}
         """
         best_combo, best_util = None, -math.inf
-        # TODO: Rest of the implementation goes here!
+        possible_combos = itertools.product(self.dec_vars_values)
+        for combo in possible_combos:
+            cpts = self.model.predict_proba(evidence)
+            util_key = list(self.util_map.key())[0]
+            util_index = self.names.index(util_key)
+            dec_dict = {d: combo[i] for i, d in enumerate(self.dec_vars)}
+            new_evidence = {dec_dict, evidence} #wrong? pretty sure its missing something before dec_dict and evidence
+            new_cpts = self.model.predict_proba(new_evidence)
+            util = 0
+            for value in cpts[util_index].parameters(0).keys():
+                util += new_cpts[util_index].parameters[0][value] + self.util_map[util_key][value]
+            if util > best_util:
+                best_combo = dec_dict
+                best_util = util
         return best_combo
 
 
@@ -71,8 +87,6 @@ class AdEngineTests(unittest.TestCase):
         engine = AdEngine(
             data_file='hw3_data.csv',
             dec_vars=["Ad1", "Ad2"],
-            # TODO: Current structure is blank; you need to fill this in using
-            # the results from the Tetrad analysis!
             structure=((), (0,), (), (2, 5,), (3, 7,), (), (5, 9,), (8, 9,), (), ()),
             # Tuple Structure
             # 0:H
@@ -85,9 +99,6 @@ class AdEngineTests(unittest.TestCase):
             # 7:F
             # 8:Ad2
             # 9:A
-
-            # TODO: Decide what the utility map should be for the Defendotron
-            # example; see format of util_map in spec and above!
             util_map={"S": {0: 0, 1: 5000, 2: 17760}}
         )
         self.assertEqual(engine.decide({"T": 1}), {"Ad1": 0, "Ad2": 1})
