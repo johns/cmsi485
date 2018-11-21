@@ -15,8 +15,31 @@ import math
 import numpy as np
 from pomegranate import *
 
+
 class AdEngine:
-    """docstring"""
+    """
+    A class to determine the proper targetted ad based on the following user interests.
+
+    Political Leaning [P]: the political leaning of the interviewee (0 = conservative, 1 = liberal)
+    Age Group [A]: generational age group of interviewee (0 = millennial, 1 = baby boomer+)
+    Position on Gun Control [G]: whether or not the interviewee is in support of stricter gun control legislation (0 = no, 1 = yes)
+    Possession of Home/Renter's Insurance [I]: whether or not the interviewee possesses home or renter's insurance (0 = no, 1 = yes)
+    Perceived Threat of Crime [T]: whether or not the interviewee believes they live in a crime-filled neighborhood (0 = no, 1 = yes)
+    Perceived Threat of Foreign Invasion [F]: whether or not the interviewee believes in a foreign threat to the homeland (0 = no, 1 = yes)
+    Home Ownership [H]: whether or not the interviewee owns their home (0 = doesn't own, 1 = owns).
+
+    The following Ad is played after the Ad Engine determines the ideal selection
+    Ad Video Choice [Ad1]: A scare tactic of a home robbery (Ad1 = 0) or a patriotic montage with lots of guns and flags waving (Ad1 = 1).
+    Ad Music Choice [Ad2]: A narrator's voice-over explaining the product (Ad2 = 0) or some tasteful classic rock that mentions freedom a bunch (Ad2 = 1).
+        The sales team showed each of these ad combinations at random,
+        then collected data on several important, binary features (described below)
+        as well as the *trinary* outcome of the sales call:
+
+    Sold [S]: outcome of the sales pitch:
+        0 = didn't buy anything
+        1 = bought Defendotron basic
+        2 = bought Defendotron 'Murica
+    """
 
     def __init__(self, data_file, structure, dec_vars, util_map):
         """
@@ -69,11 +92,11 @@ class AdEngine:
             util_key = list(self.util_map.keys())[0]
             util_index = self.names.index(util_key)
             dec_dict = {d: combo[i] for i, d in enumerate(self.dec_vars)}
-            new_evidence = {dec_dict, evidence} #wrong? pretty sure its missing something before dec_dict and evidence
+            new_evidence = {**dec_dict, **evidence}
             new_cpts = self.model.predict_proba(new_evidence)
             util = 0
-            for value in cpts[util_index].parameters(0).keys():
-                util += new_cpts[util_index].parameters[0][value] + self.util_map[util_key][value]
+            for value in cpts[util_index].parameters[0].keys():
+                util += new_cpts[util_index].parameters[0][value] * self.util_map[util_key][value]
             if util > best_util:
                 best_combo = dec_dict
                 best_util = util
@@ -81,24 +104,24 @@ class AdEngine:
 
 
 class AdEngineTests(unittest.TestCase):
-    """docstring"""
+    """Unit Tests"""
     def test_defendotron_ad_engine_t1(self):
-        """docstring"""
+        """Unit Test 1"""
         engine = AdEngine(
             data_file='hw3_data.csv',
             dec_vars=["Ad1", "Ad2"],
-            structure=((), (0,), (), (2, 5,), (3, 7,), (), (5, 9,), (8, 9,), (), ()),
+            structure=((), (), (0, 9), (6,), (0, 1), (1, 8), (), (2, 5), (), ()),
             # Tuple Structure
-            # 0:H
-            # 1:I
-            # 2:Ad1
-            # 3:G
-            # 4:S
-            # 5:P
-            # 6:T
-            # 7:F
+            # 0:P
+            # 1:A
+            # 2:G
+            # 3:I
+            # 4:T
+            # 5:F
+            # 6:H
+            # 7:S
             # 8:Ad2
-            # 9:A
+            # 9:Ad1
             util_map={"S": {0: 0, 1: 5000, 2: 17760}}
         )
         self.assertEqual(engine.decide({"T": 1}), {"Ad1": 0, "Ad2": 1})
@@ -106,25 +129,27 @@ class AdEngineTests(unittest.TestCase):
         self.assertEqual(engine.decide({"G": 1, "T": 0}), {"Ad1": 1, "Ad2": 1})
 
     def test_defendotron_ad_engine_t2(self):
-        """docstring"""
+        """
+        Unit Test 2:
+        [!] Note: in this example, say we are only deciding upon the ad
+        video (Ad1); our engine's results should adapt accordingly (see
+        tests below)
+        """
         engine = AdEngine(
             data_file='hw3_data.csv',
-            # [!] Note: in this example, say we are only deciding upon the ad
-            # video (Ad1); our engine's results should adapt accordingly (see
-            # tests below)
             dec_vars=["Ad1"],
-            structure=((), (0,), (), (2, 5,), (3, 7,), (), (5, 9,), (8, 9,), (), ()),
+            structure=((), (), (0, 9), (6,), (0, 1), (1, 8), (), (2, 5), (), ()),
             # Tuple Structure
-            # 0:H
-            # 1:I
-            # 2:Ad1
-            # 3:G
-            # 4:S
-            # 5:P
-            # 6:T
-            # 7:F
+            # 0:P
+            # 1:A
+            # 2:G
+            # 3:I
+            # 4:T
+            # 5:F
+            # 6:H
+            # 7:S
             # 8:Ad2
-            # 9:A
+            # 9:Ad1
             util_map={"S": {0: 0, 1: 5000, 2: 17760}}
         )
         self.assertEqual(engine.decide({"A": 1}), {"Ad1": 0})
