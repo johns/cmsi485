@@ -44,7 +44,7 @@ class AdEngine:
         """
         data = np.genfromtxt(data_file, dtype=int, names=True, delimiter=',')
         self.names = data.dtype.names
-        self.model = BayesianNetwork.from_structure(data.view((int, len(self.names())), structure=structure, state_names=self.names)) #wrong?
+        self.model = BayesianNetwork.from_structure(data.view((int, len(self.names))), structure=structure, state_names=self.names)
         self.data_file = data_file
         self.structure = structure
         self.dec_vars = dec_vars
@@ -63,10 +63,10 @@ class AdEngine:
         :return: dict of format: {"DecVar1": val1, "DecVar2": val2, ...}
         """
         best_combo, best_util = None, -math.inf
-        possible_combos = itertools.product(self.dec_vars_values)
+        possible_combos = itertools.product(*self.dec_vars_values)
         for combo in possible_combos:
             cpts = self.model.predict_proba(evidence)
-            util_key = list(self.util_map.key())[0]
+            util_key = list(self.util_map.keys())[0]
             util_index = self.names.index(util_key)
             dec_dict = {d: combo[i] for i, d in enumerate(self.dec_vars)}
             new_evidence = {dec_dict, evidence} #wrong? pretty sure its missing something before dec_dict and evidence
@@ -113,8 +113,6 @@ class AdEngineTests(unittest.TestCase):
             # video (Ad1); our engine's results should adapt accordingly (see
             # tests below)
             dec_vars=["Ad1"],
-            # TODO: Current structure is blank; you need to fill this in using
-            # the results from the Tetrad analysis!
             structure=((), (0,), (), (2, 5,), (3, 7,), (), (5, 9,), (8, 9,), (), ()),
             # Tuple Structure
             # 0:H
@@ -127,9 +125,6 @@ class AdEngineTests(unittest.TestCase):
             # 7:F
             # 8:Ad2
             # 9:A
-
-            # TODO: Decide what the utility map should be for the Defendotron
-            # example; see format of util_map in spec and above!
             util_map={"S": {0: 0, 1: 5000, 2: 17760}}
         )
         self.assertEqual(engine.decide({"A": 1}), {"Ad1": 0})
