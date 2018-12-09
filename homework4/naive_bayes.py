@@ -10,6 +10,7 @@ naive_bayes.py
 import unittest
 import csv
 import numpy as np
+import pandas as pd
 import scipy
 from sklearn import preprocessing
 from sklearn.naive_bayes import MultinomialNB
@@ -20,21 +21,20 @@ class NaiveBayesClassifier:
     """
 
     """
-    # with open('income-training.csv') as csv_file:
-    #     data = list(csv.reader(csv_file, delimiter=','))
+    np.set_printoptions(threshold=np.nan)
 
-    data = np.loadtxt(open("income-training.csv"), delimiter=",", dtype="object")
+    original_data = pd.read_csv("income-test.csv", na_values = ['?'])
 
-    imp = SimpleImputer(missing_values="?", strategy='most_frequent').fit(data)
-    data = imp.transform(data)
+
+    imp = SimpleImputer(missing_values='?', strategy='most_frequent')
+    data = pd.DataFrame(imp.fit_transform(original_data))
+    print(data)
 
     enc = preprocessing.OrdinalEncoder(dtype="object").fit(data)
     data = enc.transform(data)
 
     bin = preprocessing.KBinsDiscretizer(encode="ordinal", strategy="quantile").fit(data)
     data = bin.transform(data)
-
-    print(data)
 
 
 
