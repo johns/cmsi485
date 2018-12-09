@@ -20,18 +20,22 @@ class NaiveBayesClassifier:
     """
 
     """
-    with open('income-training.csv') as csv_file:
-        data = list(csv.reader(csv_file, delimiter=','))
+    # with open('income-training.csv') as csv_file:
+    #     data = list(csv.reader(csv_file, delimiter=','))
 
-    enc = preprocessing.OrdinalEncoder(dtype="object").fit(data)
-    data = enc.transform(data)
-    print(data)
+    data = np.loadtxt(open("income-training.csv"), delimiter=",", dtype="object")
 
     imp = SimpleImputer(missing_values="?", strategy='most_frequent').fit(data)
     data = imp.transform(data)
 
-    enc = preprocessing.KBinsDiscretizer(encode="ordinal", strategy="quantile").fit(data)
+    enc = preprocessing.OrdinalEncoder(dtype="object").fit(data)
     data = enc.transform(data)
+
+    bin = preprocessing.KBinsDiscretizer(encode="ordinal", strategy="quantile").fit(data)
+    data = bin.transform(data)
+
+    print(data)
+
 
 
 
