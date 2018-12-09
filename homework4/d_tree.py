@@ -8,6 +8,8 @@ d_tree.py
 '''
 
 import unittest
+import numpy as np
+import scipy
 
 
 class DecisionTree:

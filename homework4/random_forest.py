@@ -8,6 +8,8 @@ random_forest.py
 '''
 
 import unittest
+import numpy as np
+import scipy
 
 
 class RandomForest:
