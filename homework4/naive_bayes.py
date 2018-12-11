@@ -17,9 +17,19 @@ from sklearn.impute import SimpleImputer
 
 
 class NaiveBayesClassifier:
+    """
+    Naive Bayes Classifier that preprocesses existing data to train an agent such that the
+    agent can learn how to accurately predict a feature: specifically, we are determining
+    whether or not an individual earns more or less than 50,000 USD per year when we know
+    some related features about those persons.
+    """
 
     def preprocess(file_name):
-        names = ("age", "wrk_cls", "edu", "edu_num", "marital_sts", "occu_code", "relation", "race", "sex", "gain", "loss", "hours", "country", "income")
+        """
+        Preprocesses the data for the NBC so that it is properly formatted for our training model.
+        """
+        names = ("age", "wrk_cls", "edu", "edu_num", "marital_sts", "occu_code",
+                 "relation", "race", "sex", "gain", "loss", "hours", "country", "income")
 
         original_data = pd.read_csv(file_name, dtype=object, names=names)
         original_data = pd.DataFrame(original_data)
@@ -36,6 +46,9 @@ class NaiveBayesClassifier:
         return data
 
     def train_model(data):
+        """
+        Trains agent on preprocessed data.
+        """
         X, Y = data[:, :-1], data[:, -1]
         print(X)
         print(Y)
@@ -46,8 +59,13 @@ class NaiveBayesClassifier:
 
 
 class NaiveBayesClassifierTests(unittest.TestCase):
+    """
+    Tests to determine the efficacy of our agent.
+    """
     def test(self):
-
+        """
+        Train agent using income-training data and test accuracy of agent on income-test data.
+        """
         processed_training_data = NaiveBayesClassifier.preprocess("income-training.csv")
         processed_test_data = NaiveBayesClassifier.preprocess("income-test.csv")
 
