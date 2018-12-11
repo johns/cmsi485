@@ -30,17 +30,16 @@ class NaiveBayesClassifier:
         names = ("age", "wrk_cls", "edu", "edu_num", "marital_sts",
                  "occu_code", "relation", "race", "sex", "gain",
                  "loss", "hours", "country", "income")
-        original_data = pd.read_csv(file_name, dtype=object, names=names)
+        original_data = pd.read_csv(file_name, dtype=object, names=names, skipinitialspace=True)
         original_data = pd.DataFrame(original_data)
-        original_data.drop(columns=["edu_num"])
 
-        imp = SimpleImputer(missing_values=' ?', strategy='most_frequent', verbose=1)
+        imp = SimpleImputer(missing_values='?', strategy='most_frequent', verbose=2)
         data = imp.fit_transform(original_data)
 
         enc = preprocessing.OrdinalEncoder()
         data = enc.fit_transform(data)
 
-        est = preprocessing.KBinsDiscretizer(encode="ordinal", n_bins=3)
+        est = preprocessing.KBinsDiscretizer(encode="ordinal")
         data = est.fit_transform(data)
         return data
 
