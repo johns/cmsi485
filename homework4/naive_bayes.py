@@ -8,6 +8,7 @@ naive_bayes.py
 '''
 
 import unittest
+import warnings
 import numpy as np
 import pandas as pd
 import scipy
@@ -50,8 +51,6 @@ class NaiveBayesClassifier:
         Trains agent on preprocessed data.
         """
         X, Y = data[:, :-1], data[:, -1]
-        print(X)
-        print(Y)
 
         classifier = MultinomialNB()
         classifier.fit(X, Y)
@@ -62,6 +61,12 @@ class NaiveBayesClassifierTests(unittest.TestCase):
     """
     Tests to determine the efficacy of our agent.
     """
+    def setUp(self):
+        """
+        Suppresses annoying warning
+        """
+        warnings.simplefilter('ignore', category=ImportWarning)
+
     def test(self):
         """
         Train agent using income-training data and test accuracy of agent on income-test data.
@@ -70,8 +75,8 @@ class NaiveBayesClassifierTests(unittest.TestCase):
         processed_test_data = NaiveBayesClassifier.preprocess("income-test.csv")
 
         trained_model = NaiveBayesClassifier.train_model(processed_training_data)
-        print(trained_model.predict(processed_test_data))
-
+        accuracy = trained_model.score(processed_test_data[:, :-1], processed_test_data[:, -1])
+        print("Agent Prediction Accuracy: ", round(accuracy * 100, 2), "%")
 
 if __name__ == "__main__":
     unittest.main()
