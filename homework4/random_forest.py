@@ -25,10 +25,13 @@ class RandomForest:
 
     def preprocess(file_name):
         """
-        Preprocesses the data for the NBC so that it is properly formatted for our training model.
+        Preprocesses the data for the NBC so that it is properly formatted for
+        our training model.
         """
-        names = ["age", "wrk_cls", "edu", "edu_num", "marital_sts", "occu_code",
-                 "relation", "race", "sex", "gain", "loss", "hours", "country", "income"]
+
+        names = ["age", "wrk_cls", "edu", "edu_num", "marital_sts",
+                 "occu_code", "relation", "race", "sex", "gain",
+                 "loss", "hours", "country", "income"]
 
         original_data = np.genfromtxt(file_name, dtype=object, names=names, delimiter=",")
         original_data = pd.DataFrame(original_data)
@@ -49,7 +52,7 @@ class RandomForest:
         """
         X, Y = data[:, :-1], data[:, -1]
 
-        clf = RandomForestClassifier(n_estimators=100, max_depth=2, random_state=0)
+        clf = RandomForestClassifier(n_estimators=45, max_depth=10, random_state=0)
         clf.fit(X, Y)
         return clf
 
