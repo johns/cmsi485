@@ -8,20 +8,20 @@ Read csv file with pandas read_csv(), which also eliminated leading whitespaces.
 ##### What hyper parameters did we set?
 For the SimpleImputer we used the following parameters: missing_value="?", strategy="most_frequent", verbose=2(because when =0 it did not replace all "?")
 
-For KBinsDiscretizer encode=ordinal
+For KBinsDiscretizer n_bins=7, encode=ordinal
 
 No additional hyperparameters were applied for training
 
 
 ##### What was our resulting classification accuracy?
-76.79% Accuracy
+77.89% Accuracy
 
 ## Decision Trees
 ##### How did we preprocess the data?
 
 
 ##### What hyper parameters did we set?
-
+For KBinsDiscretizer n_bins=8
 
 ##### What was our resulting classification accuracy?
 81.15% Accuracy
@@ -32,8 +32,10 @@ No additional hyperparameters were applied for training
 
 
 ##### What hyper parameters did we set?
+For KBinsDiscretizer n_bins=5(default)
+
 For training the RandomForest we used the following parameters:
 n_estimators=45, max_depth=10, random_state=0
 
 ##### What was our resulting classification accuracy?
-82.80% Accuracy
+83.16% Accuracy

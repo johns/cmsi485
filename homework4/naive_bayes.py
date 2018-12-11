@@ -39,7 +39,7 @@ class NaiveBayesClassifier:
         enc = preprocessing.OrdinalEncoder()
         data = enc.fit_transform(data)
 
-        est = preprocessing.KBinsDiscretizer(encode="ordinal")
+        est = preprocessing.KBinsDiscretizer(n_bins=7, encode="ordinal")
         data = est.fit_transform(data)
         return data
 
