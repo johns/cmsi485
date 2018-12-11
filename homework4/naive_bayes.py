@@ -19,7 +19,7 @@ from sklearn.impute import SimpleImputer
 class NaiveBayesClassifier:
 
     def preprocess(file_name):
-        names = ("age", "wrk_cls", "educ", "educ_num", "marital_sts", "occu_code", "realtion", "race", "sex", "gain", "loss", "hours", "country", "income")
+        names = ("age", "wrk_cls", "edu", "edu_num", "marital_sts", "occu_code", "relation", "race", "sex", "gain", "loss", "hours", "country", "income")
 
         original_data = pd.read_csv(file_name, dtype=object, names=names)
         original_data = pd.DataFrame(original_data)
