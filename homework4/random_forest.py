@@ -19,13 +19,10 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.datasets import make_classification
 
 class RandomForest:
-    """
-
-    """
 
     def preprocess(file_name):
         """
-        Preprocesses the data for the NBC so that it is properly formatted for
+        Preprocesses the data for the Random Forest so that it is properly formatted for
         our training model.
         """
 
@@ -35,14 +32,15 @@ class RandomForest:
 
         original_data = np.genfromtxt(file_name, dtype=object, names=names, delimiter=",")
         original_data = pd.DataFrame(original_data)
-
+        original_data.drop(columns=["edu_num"])
+        
         imp = SimpleImputer(missing_values=' ?', strategy='most_frequent', verbose=1)
         data = imp.fit_transform(original_data)
 
         enc = preprocessing.OrdinalEncoder()
         data = enc.fit_transform(data)
 
-        est = preprocessing.KBinsDiscretizer(encode="ordinal")
+        est = preprocessing.KBinsDiscretizer(n_bins=3, encode="ordinal")
         data = est.fit_transform(data)
         return data
 

@@ -21,20 +21,18 @@ class DecisionTree:
     data in a training set, then test its efficacy on a test set.
     """
 
-    def __init__(self):
-        """
-        Constructor
-        """
-
     def preprocess(self, file_name):
         """
         Method to preprocess data to be in a format that is conducive
         to training.
         """
-        names = ("age", "wrk_cls", "edu", "edu_num", "marital_sts", "occu_code", "relation", "race", "sex", "gain", "loss", "hours", "country", "income")
+        names = ("age", "wrk_cls", "edu", "edu_num", "marital_sts",
+                 "occu_code", "relation", "race", "sex", "gain",
+                 "loss", "hours", "country", "income")
 
         original_data = pd.read_csv(file_name, dtype=object, names=names)
         original_data = pd.DataFrame(original_data)
+        original_data.drop(columns=["edu_num"])
 
         imp = SimpleImputer(missing_values=' ?', strategy='most_frequent', verbose=1)
         data = imp.fit_transform(original_data)
@@ -42,7 +40,7 @@ class DecisionTree:
         enc = preprocessing.OrdinalEncoder()
         data = enc.fit_transform(data)
 
-        est = preprocessing.KBinsDiscretizer(encode="ordinal")
+        est = preprocessing.KBinsDiscretizer(n_bins=3, encode="ordinal")
         data = est.fit_transform(data)
 
         return data

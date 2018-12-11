@@ -27,15 +27,20 @@ class NaiveBayesClassifier:
         """
         Preprocesses the data for the NBC so that it is properly formatted for our training model.
         """
-        names = ("age", "wrk_cls", "edu", "edu_num", "marital_sts", "occu_code",
-                 "relation", "race", "sex", "gain", "loss", "hours", "country", "income")
+        names = ("age", "wrk_cls", "edu", "edu_num", "marital_sts",
+                 "occu_code", "relation", "race", "sex", "gain",
+                 "loss", "hours", "country", "income")
         original_data = pd.read_csv(file_name, dtype=object, names=names)
         original_data = pd.DataFrame(original_data)
+        original_data.drop(columns=["edu_num"])
+
         imp = SimpleImputer(missing_values=' ?', strategy='most_frequent', verbose=1)
         data = imp.fit_transform(original_data)
+
         enc = preprocessing.OrdinalEncoder()
         data = enc.fit_transform(data)
-        est = preprocessing.KBinsDiscretizer(encode="ordinal")
+
+        est = preprocessing.KBinsDiscretizer(encode="ordinal", n_bins=3)
         data = est.fit_transform(data)
         return data
 
@@ -52,6 +57,7 @@ class NaiveBayesClassifierTests(unittest.TestCase):
     def setUp(self):
         """ Suppresses annoying warning """
         warnings.simplefilter('ignore', category=ImportWarning)
+        warnings.simplefilter('ignore', category=RuntimeWarning)
 
     def test(self):
         """
