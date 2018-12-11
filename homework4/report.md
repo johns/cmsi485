@@ -2,38 +2,38 @@
 ####  Sam Chami, Jackson Myers, John Scott, and Ben Smith
 
 ## Naive Bayes Classifier
-How did we preprocess the data?
+##### How did we preprocess the data?
+Read csv file with pandas read_csv(), which also eliminated leading whitespaces. That was turned into a pandas data frame. We used SimpleImputer from sklearn to replace missing values with the most frequent value in the feature. We encoded the data with the OrdinalEncoder then used KBinsDiscretizer to transform continuous values to discrete values.
+
+##### What hyper parameters did we set?
+For the SimpleImputer we used the following parameters: missing_value="?", strategy="most_frequent", verbose=2(because when =0 it did not replace all "?")
+
+For KBinsDiscretizer encode=ordinal
+
+No additional hyperparameters were applied for training
 
 
-
-What hyper parameters did we set?
-
-
-
-What was our resulting classification accuracy?
-
-
+##### What was our resulting classification accuracy?
+76.79% Accuracy
 
 ## Decision Trees
-How did we preprocess the data?
+##### How did we preprocess the data?
 
 
-
-What hyper parameters did we set?
-
+##### What hyper parameters did we set?
 
 
-What was our resulting classification accuracy?
-
+##### What was our resulting classification accuracy?
+81.15% Accuracy
 
 
 ## Random Forest
-How did we preprocess the data?
+##### How did we preprocess the data?
 
 
+##### What hyper parameters did we set?
+For training the RandomForest we used the following parameters:
+n_estimators=45, max_depth=10, random_state=0
 
-What hyper parameters did we set?
-
-
-
-What was our resulting classification accuracy?
+##### What was our resulting classification accuracy?
+82.80% Accuracy
