@@ -26,10 +26,10 @@ class RandomForest:
         """
         Preprocesses the data for the NBC so that it is properly formatted for our training model.
         """
-        names = ("age", "wrk_cls", "edu", "edu_num", "marital_sts", "occu_code",
-                 "relation", "race", "sex", "gain", "loss", "hours", "country", "income")
+        names = ["age", "wrk_cls", "edu", "edu_num", "marital_sts", "occu_code",
+                 "relation", "race", "sex", "gain", "loss", "hours", "country", "income"]
 
-        original_data = pd.read_csv(file_name, dtype=object, names=names)
+        original_data = np.genfromtxt(file_name, dtype=object, names=names, delimiter=",")
         original_data = pd.DataFrame(original_data)
 
         imp = SimpleImputer(missing_values=' ?', strategy='most_frequent', verbose=1)
@@ -48,17 +48,18 @@ class RandomForest:
                                    n_informative=2, n_redundant=0,
                                    random_state=0, shuffle=False)
 
-        # X = RandomForest.preprocess("income-training.csv")
-        # y = RandomForest.preprocess("income-test.csv")
+        X = RandomForest.preprocess("income-training.csv")
+        y = RandomForest.preprocess("income-test.csv")
 
         print(X)
         print(y)
 
         clf = RandomForestClassifier(n_estimators=100, max_depth=2, random_state=0)
-        clf.fit(X,y)
+        clf.fit(y,X)
+        print(clf.score([[X, y]]))
+
 
         print(clf.feature_importances_)
-        print(clf.predict([[0, 0, 0, 0]]))
 
 
 class RandomForestTests(unittest.TestCase):
