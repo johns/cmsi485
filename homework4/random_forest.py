@@ -8,6 +8,7 @@ random_forest.py
 '''
 
 import unittest
+import warnings
 import numpy as np
 import pandas as pd
 import scipy
@@ -40,30 +41,26 @@ class RandomForest:
 
         est = preprocessing.KBinsDiscretizer(encode="ordinal")
         data = est.fit_transform(data)
-
         return data
 
     def train_model(data):
-        X, y = make_classification(n_samples=1000, n_features=4,
-                                   n_informative=2, n_redundant=0,
-                                   random_state=0, shuffle=False)
-
-        X = RandomForest.preprocess("income-training.csv")
-        y = RandomForest.preprocess("income-test.csv")
-
-        print(X)
-        print(y)
+        """
+        Trains agent on preprocessed data.
+        """
+        X, Y = data[:, :-1], data[:, -1]
 
         clf = RandomForestClassifier(n_estimators=100, max_depth=2, random_state=0)
-        clf.fit(y,X)
-        print(clf.score([[X, y]]))
-
-
-        print(clf.feature_importances_)
-
+        clf.fit(X, Y)
+        return clf
 
 class RandomForestTests(unittest.TestCase):
     """Unit Tests"""
+    def setUp(self):
+        """
+        Suppresses annoying warning
+        """
+        warnings.simplefilter('ignore', category=ImportWarning)
+
     def test(self):
         """
         Train agent using income-training data and test accuracy of agent on income-test data.
@@ -72,8 +69,8 @@ class RandomForestTests(unittest.TestCase):
         processed_test_data = RandomForest.preprocess("income-test.csv")
 
         trained_model = RandomForest.train_model(processed_training_data)
-
-
+        accuracy = trained_model.score(processed_test_data[:, :-1], processed_test_data[:, -1])
+        print("Agent Prediction Accuracy: ", round(accuracy * 100, 2), "%")
 
 if __name__ == "__main__":
     unittest.main()
