@@ -8,19 +8,20 @@ random_forest.py
 '''
 
 import unittest
-import warnings
-import numpy as np
 import pandas as pd
-import scipy
 from sklearn import preprocessing
-from sklearn.naive_bayes import MultinomialNB
 from sklearn.impute import SimpleImputer
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.datasets import make_classification
 
 class RandomForest:
+    """
+    Random Forest that preprocesses existing data to train an agent such that
+    the agent can learn how to accurately predict a feature: specifically, we
+    are determining whether or not an individual earns more or less than 50,000
+    USD per year when we know some related features about those persons.
+    """
 
-    def preprocess(file_name):
+    def preprocess(self, file_name):
         """
         Preprocesses the data for the Random Forest so that it is properly formatted for
         our training model.
@@ -43,32 +44,27 @@ class RandomForest:
         data = est.fit_transform(data)
         return data
 
-    def train_model(data):
-        """
-        Trains agent on preprocessed data.
-        """
+    def train_model(self, data):
+        """ Trains agent on preprocessed data. """
         X, Y = data[:, :-1], data[:, -1]
 
-        clf = RandomForestClassifier(n_estimators=45, max_depth=10, random_state=0)
-        clf.fit(X, Y)
-        return clf
+        classifier = RandomForestClassifier(n_estimators=45, max_depth=10, random_state=0)
+        classifier.fit(X, Y)
+        return classifier
 
 class RandomForestTests(unittest.TestCase):
-    """Unit Tests"""
-    def setUp(self):
-        """
-        Suppresses annoying warning
-        """
-        warnings.simplefilter('ignore', category=ImportWarning)
+    """ Tests to determine the efficacy of our agent """
 
     def test(self):
         """
-        Train agent using income-training data and test accuracy of agent on income-test data.
+        Train agent using income-training data and test accuracy of agent on
+        income-test data.
         """
-        processed_training_data = RandomForest.preprocess("income-training.csv")
-        processed_test_data = RandomForest.preprocess("income-test.csv")
+        forest = RandomForest()
+        processed_training_data = forest.preprocess("income-training.csv")
+        processed_test_data = forest.preprocess("income-test.csv")
 
-        trained_model = RandomForest.train_model(processed_training_data)
+        trained_model = forest.train_model(processed_training_data)
         accuracy = trained_model.score(processed_test_data[:, :-1], processed_test_data[:, -1])
         print("Agent Prediction Accuracy: ", round(accuracy * 100, 2), "%")
 
